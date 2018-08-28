@@ -22,7 +22,7 @@ const Person = (props) => {
             <input
                 type="text"
                 onChange={props.changed}
-                value={props.name}
+                username={props.name}
             />
         </div>
     );
