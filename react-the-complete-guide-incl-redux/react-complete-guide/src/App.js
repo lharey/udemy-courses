@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
+
 // Radium is a set of tools to manage inline styles on React elements
 // https://formidable.com/open-source/radium/
 // import Radium, { StyleRoot } from 'radium';
-import './App.css';
+
+// When using css modules - specified in webpack config
+// https://github.com/css-modules/css-modules
+import classes from './App.css';
+// without using css modules
+// import './App.css';
+
 import Person from './Person/Person';
 
 
@@ -55,21 +62,22 @@ class App extends Component {
     }
 
     render () {
-        const style = {
-            backgroundColor: 'green',
-            color: 'white',
-            font: 'inherit',
-            border: '1px solid blue',
-            padding: '8px',
-            cursor: 'pointer',
-            // inline hover only works with Radium
-            // ':hover': {
-            //     backgroundColor: 'lightgreen',
-            //     color: 'black'
-            // }
-        };
+        // const style = {
+        //     backgroundColor: 'green',
+        //     color: 'white',
+        //     font: 'inherit',
+        //     border: '1px solid blue',
+        //     padding: '8px',
+        //     cursor: 'pointer',
+        //     // inline hover only works with Radium
+        //     // ':hover': {
+        //     //     backgroundColor: 'lightgreen',
+        //     //     color: 'black'
+        //     // }
+        // };
 
         let people = null;
+        let btnClass = '';
 
         if (this.state.showPeople) {
             people = (
@@ -88,31 +96,36 @@ class App extends Component {
                 </div>
             );
 
-            style.backgroundColor = 'red';
+            //style.backgroundColor = 'red';
             // inline hover only works with Radium
             // style[':hover'] = {
             //     backgroundColor: 'orange',
             //     color: 'black'
             // };
+
+            btnClass = classes.Red;
         }
 
-        const classes = [];
+        const assignedClasses = [];
         if (this.state.people.length <= 2) {
-            classes.push('red');
+            assignedClasses.push(classes.red);
         }
         if (this.state.people.length <= 1) {
-            classes.push('bold');
+            assignedClasses.push(classes.bold);
         }
 
         // StlyeRoot enable media queries to be used with inline styles in all components
         return (
             // <StyleRoot>
-            <div className="App">
+            // with css modules
+            <div className={classes.App}>
+                {/* without css modules <div className="App"> */}
                 <h1>Hi I'm a react App</h1>
-                <p className={classes.join(' ')}>This is really working!</p>
+                <p className={assignedClasses.join(' ')}>This is really working!</p>
                 <button
                     onClick={this.togglePeopleHandler}
-                    style={style}
+                    // style={style}
+                    className={btnClass}
                 >Toggle People</button>
 
                 {people}
