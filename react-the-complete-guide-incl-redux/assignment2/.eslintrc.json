@@ -3,7 +3,7 @@
         "browser": true,
         "es6": true
     },
-    "extends": ["eslint:recommended", "react"],
+    "extends": "eslint:recommended",
     "parser": "babel-eslint",
     "parserOptions": {
         "ecmaFeatures": {
@@ -25,15 +25,14 @@
             "error",
             "unix"
         ],
-        "quotes": ["error", "single", { "allowTemplateLiterals": true }],
+        "quotes": [
+            "error",
+            "single"
+        ],
         "semi": [
             "error",
             "always"
         ],
-        "comma-dangle": ["error", {
-            "arrays": "only-multiline",
-            "objects": "only-multiline"
-        }],
         "react/jsx-uses-react": 2,
         "react/jsx-uses-vars": [2]
 

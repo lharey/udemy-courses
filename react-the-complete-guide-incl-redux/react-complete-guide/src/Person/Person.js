@@ -17,7 +17,7 @@ import './Person.css';
 const Person = (props) => {
     return (
         <div className="Person">
-            <p onClick={props.clickNameHandler}>My name is {props.name} and I'm {props.age} years old.</p>
+            <p onClick={props.click}>My name is {props.name} and I'm {props.age} years old.</p>
             <p>{props.children}</p>
             <input
                 type="text"
