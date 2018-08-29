@@ -10,6 +10,7 @@ import classes from './App.css';
 // without using css modules
 // import './App.css';
 
+import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 import Person from './Person/Person';
 
 
@@ -84,13 +85,16 @@ class App extends Component {
                 <div>
                     {this.state.people.map((person, index) => {
                         return (
-                            <Person
-                                click={() => this.deletePersonHandler(index)}
-                                name={person.name}
-                                age={person.age}
-                                key={`person${index}`}
-                                changed={(event) => this.nameChangedHandler(event, person.id)}
-                            />
+                            // Only wrap things with ErrorBoundary if you know where code might fail beyond your control
+                            // Eg api requests
+                            <ErrorBoundary key={`person${index}`}>
+                                <Person
+                                    click={() => this.deletePersonHandler(index)}
+                                    name={person.name}
+                                    age={person.age}
+                                    changed={(event) => this.nameChangedHandler(event, person.id)}
+                                />
+                            </ErrorBoundary>
                         );
                     })}
                 </div>
