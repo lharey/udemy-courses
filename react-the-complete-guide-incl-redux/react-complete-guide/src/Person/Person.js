@@ -1,5 +1,6 @@
 // import React, { Component } from 'react';
 import React from 'react';
+// import Radium from 'radium';
 
 import './Person.css';
 
@@ -15,8 +16,15 @@ import './Person.css';
 // }
 
 const Person = (props) => {
+    const style = {
+        // inline Media queires only work with Radium
+        // '@media (min-width: 500px)': {
+        //     width: '450px'
+        // }
+    };
+
     return (
-        <div className="Person">
+        <div className="Person" style={style}>
             <p onClick={props.click}>My name is {props.name} and I'm {props.age} years old.</p>
             <p>{props.children}</p>
             <input
@@ -28,4 +36,5 @@ const Person = (props) => {
     );
 };
 
+// export default Radium(Person);
 export default Person;

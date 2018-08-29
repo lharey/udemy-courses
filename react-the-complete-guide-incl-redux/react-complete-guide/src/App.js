@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
+// Radium is a set of tools to manage inline styles on React elements
+// https://formidable.com/open-source/radium/
+// import Radium, { StyleRoot } from 'radium';
 import './App.css';
 import Person from './Person/Person';
+
 
 class App extends Component {
     state = {
@@ -52,11 +56,17 @@ class App extends Component {
 
     render () {
         const style = {
-            backgroundColor: 'white',
+            backgroundColor: 'green',
+            color: 'white',
             font: 'inherit',
             border: '1px solid blue',
             padding: '8px',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            // inline hover only works with Radium
+            // ':hover': {
+            //     backgroundColor: 'lightgreen',
+            //     color: 'black'
+            // }
         };
 
         let people = null;
@@ -77,11 +87,29 @@ class App extends Component {
                     })}
                 </div>
             );
+
+            style.backgroundColor = 'red';
+            // inline hover only works with Radium
+            // style[':hover'] = {
+            //     backgroundColor: 'orange',
+            //     color: 'black'
+            // };
         }
 
+        const classes = [];
+        if (this.state.people.length <= 2) {
+            classes.push('red');
+        }
+        if (this.state.people.length <= 1) {
+            classes.push('bold');
+        }
+
+        // StlyeRoot enable media queries to be used with inline styles in all components
         return (
+            // <StyleRoot>
             <div className="App">
                 <h1>Hi I'm a react App</h1>
+                <p className={classes.join(' ')}>This is really working!</p>
                 <button
                     onClick={this.togglePeopleHandler}
                     style={style}
@@ -89,11 +117,12 @@ class App extends Component {
 
                 {people}
             </div>
-
+            // </StyleRoot>
         );
 
         //return React.createElement('div',{ className: "App" },React.createElement('h1',null,"Hi I'm a react App!!!!"));
     }
 }
 
+// export default Radium(App);
 export default App;

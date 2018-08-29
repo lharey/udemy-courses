@@ -25,7 +25,9 @@
             "error",
             "unix"
         ],
+        "new-cap": ["error", { "capIsNew": false }],
         "quotes": ["error", "single", { "allowTemplateLiterals": true }],
+        "quote-props": ["error", "as-needed"],
         "semi": [
             "error",
             "always"
