@@ -16,17 +16,51 @@ import Persons from '../components/Persons/Persons';
 
 
 class App extends Component {
-    state = {
-        people: [
-            { id: 1, name: 'Alex', age: 4 },
-            { id: 2, name: 'Erin', age: 6 },
-            { id: 3, name: 'Archie', age: 0 },
-        ],
-        showPeople: false
+    constructor(props) {
+        super(props);
+        console.log('[App.js] inside constructor', props);
+        this.state = {
+            people: [
+                { id: 1, name: 'Alex', age: 4 },
+                { id: 2, name: 'Erin', age: 6 },
+                { id: 3, name: 'Archie', age: 0 },
+            ],
+            showPeople: false
+        };
     }
 
+    componentWillMount() {
+        console.log('[App.js] inside componentWillMount');
+    }
+
+    componentDidMount() {
+        console.log('[App.js] inside componentDidMount');
+    }
+
+    shouldComponentUpdate (nextProps, nextState) {
+        console.log('[App.js] inside shouldComponentUpdate', nextProps, nextState);
+        return true;
+    }
+
+    componentWillUpdate (nextProps, nextState) {
+        console.log('[App.js] inside componentWillUpdate', nextProps, nextState);
+    }
+
+    componentDidUpdate () {
+        console.log('[App.js] inside componentDidUpdate');
+    }
+
+    // Initialising state outside of constructor only works in more modern versions
+    // state = {
+    //     people: [
+    //         { id: 1, name: 'Alex', age: 4 },
+    //         { id: 2, name: 'Erin', age: 6 },
+    //         { id: 3, name: 'Archie', age: 0 },
+    //     ],
+    //     showPeople: false
+    // }
+
     deletePersonHandler = (index) => {
-        console.log('deletePersonHandler');
         // const people = this.state.people.slice(); // slice without args copies array
         const people = [...this.state.people]; // using spread operator is a nicer way of copying array
         people.splice(index, 1);
@@ -64,6 +98,7 @@ class App extends Component {
     }
 
     render () {
+        console.log('[App.js] inside render');
         let people = null;
         if (this.state.showPeople) {
             people = <Persons

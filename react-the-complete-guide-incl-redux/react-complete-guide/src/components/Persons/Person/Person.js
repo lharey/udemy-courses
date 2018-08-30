@@ -1,40 +1,37 @@
-// import React, { Component } from 'react';
-import React from 'react';
+import React, { Component } from 'react';
 // import Radium from 'radium';
 
 import classes from './Person.css';
 
-// class Person extends Component {
-//     render () {
-//         return (
-//             <div>
-//                 <p>My name is {this.props.name} and I'm {this.props.age} years old.</p>
-//                 <p>{this.props.children}</p>
-//             </div>
-//         );
-//     }
-// }
+class Person extends Component {
+    constructor(props) {
+        super(props);
+        console.log('[Person.js] inside constructor', props);
+    }
 
-const Person = (props) => {
-    const style = {
-        // inline Media queires only work with Radium
-        // '@media (min-width: 500px)': {
-        //     width: '450px'
-        // }
-    };
+    componentWillMount() {
+        console.log('[Person.js] inside componentWillMount');
+    }
 
-    return (
-        <div className={classes.Person} style={style}>
-            <p onClick={props.click}>My name is {props.name} and I'm {props.age} years old.</p>
-            <p>{props.children}</p>
-            <input
-                type="text"
-                onChange={props.changed}
-                username={props.name}
-            />
-        </div>
-    );
-};
+    componentDidMount() {
+        console.log('[Person.js] inside componentDidMount');
+    }
+
+    render () {
+        console.log('[Person.js] inside componentDidMount');
+        return (
+            <div className={classes.Person}>
+                <p onClick={this.props.click}>My name is {this.props.name} and I'm {this.props.age} years old.</p>
+                <p>{this.props.children}</p>
+                <input
+                    type="text"
+                    onChange={this.props.changed}
+                    username={this.props.name}
+                />
+            </div>
+        );
+    }
+}
 
 // export default Radium(Person);
 export default Person;
