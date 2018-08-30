@@ -1,8 +1,9 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
+import PropTypes from 'prop-types';
 
 import Person from './Person/Person';
 
-class Persons extends Component {
+class Persons extends PureComponent {
     constructor(props) {
         super(props);
         console.log('[Persons.js] inside constructor', props);
@@ -20,10 +21,13 @@ class Persons extends Component {
         console.log('[Persons.js] inside componentWillReceiveProps', nextProps);
     }
 
-    shouldComponentUpdate (nextProps, nextState) {
-        console.log('[Persons.js] inside shouldComponentUpdate', nextProps, nextState);
-        return nextProps.persons !== this.props.persons;
-    }
+    // A PureComponent has this built in - only use it if updates might not be required
+    // shouldComponentUpdate (nextProps, nextState) {
+    //     console.log('[Persons.js] inside shouldComponentUpdate', nextProps, nextState);
+    //     return nextProps.persons !== this.props.persons ||
+    //     nextProps.changed !== this.props.changed ||
+    //     nextProps.clicked !== this.props.clicked;
+    // }
 
     componentWillUpdate (nextProps, nextState) {
         console.log('[Persons.js] inside componentWillUpdate', nextProps, nextState);
@@ -46,5 +50,12 @@ class Persons extends Component {
         });
     }
 }
+
+Person.propTypes = {
+    click: PropTypes.func,
+    name: PropTypes.string,
+    age: PropTypes.number,
+    change:PropTypes.func
+};
 
 export default Persons;

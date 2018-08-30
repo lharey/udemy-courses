@@ -1,14 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import classes from './Cockpit.css';
+import Aux from '../../hoc/Aux';
 
 const cockpit = (props) => {
 
     const assignedClasses = [];
-    let btnClass = '';
+    let btnClass = classes.Button;
 
     if (props.showPersons) {
-        btnClass = classes.Red;
+        btnClass = [classes.Button, classes.Red].join(' ');
     }
 
     if (props.persons.length <= 2) {
@@ -19,7 +21,8 @@ const cockpit = (props) => {
     }
 
     return (
-        <div className={classes.Cockpit}>
+        // Note in react 16.2 you can use a build in Aux component so you can wrap in <></>
+        <Aux>
             <h1>{props.appTitle}</h1>
             <p className={assignedClasses.join(' ')}>This is really working!</p>
             <button
@@ -27,8 +30,15 @@ const cockpit = (props) => {
                 // style={style}
                 className={btnClass}
             >Toggle People</button>
-        </div>
+        </Aux>
     );
+};
+
+cockpit.propTypes = {
+    btnClicked: PropTypes.func,
+    appTitle: PropTypes.string,
+    persons: PropTypes.array,
+    showPersons: PropTypes.bool
 };
 
 export default cockpit;

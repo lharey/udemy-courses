@@ -3,7 +3,7 @@
         "browser": true,
         "es6": true
     },
-    "extends": ["eslint:recommended"],
+    "extends": ["eslint:recommended","react"],
     "parser": "babel-eslint",
     "parserOptions": {
         "ecmaFeatures": {
@@ -39,6 +39,5 @@
         }],
         "react/jsx-uses-react": 2,
         "react/jsx-uses-vars": [2]
-
     }
 }

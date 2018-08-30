@@ -13,6 +13,8 @@ import classes from './App.css';
 //import ErrorBoundary from '../components/ErrorBoundary/ErrorBoundary';
 import Cockpit from '../components/Cockpit/Cockpit';
 import Persons from '../components/Persons/Persons';
+import Aux from '../hoc/Aux';
+import withClass from '../hoc/withClass2';
 
 
 class App extends Component {
@@ -39,7 +41,8 @@ class App extends Component {
 
     shouldComponentUpdate (nextProps, nextState) {
         console.log('[App.js] inside shouldComponentUpdate', nextProps, nextState);
-        return true;
+        return nextState.persons !== this.state.persons ||
+            nextState.showPeople !== this.state.showPeople;
     }
 
     componentWillUpdate (nextProps, nextState) {
@@ -109,12 +112,9 @@ class App extends Component {
 
         }
 
-        // StlyeRoot enable media queries to be used with inline styles in all components
         return (
-            // <StyleRoot>
-            // without css modules <div className="App">
-            // with css modules
-            <div className={classes.App}>
+            <Aux>
+                <button onClick={() => { this.setState({showPeople: true}); }}>Show Persons</button>
                 <Cockpit
                     appTitle={this.props.title}
                     showPersons={this.state.showPeople}
@@ -122,8 +122,7 @@ class App extends Component {
                     btnClicked={this.togglePeopleHandler}
                 />
                 {people}
-            </div>
-            // </StyleRoot>
+            </Aux>
         );
 
         //return React.createElement('div',{ className: "App" },React.createElement('h1',null,"Hi I'm a react App!!!!"));
@@ -131,4 +130,4 @@ class App extends Component {
 }
 
 // export default Radium(App);
-export default App;
+export default withClass(App, classes.App);
