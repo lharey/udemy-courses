@@ -16,9 +16,12 @@ import Persons from '../components/Persons/Persons';
 import Aux from '../hoc/Aux';
 import withClass from '../hoc/withClass2';
 
+// React context api introduced in v16.3
+export const AuthContext = React.createContext(false);
+
 
 class App extends Component {
-    constructor(props) {
+    constructor (props) {
         super(props);
         console.log('[App.js] inside constructor', props);
         this.state = {
@@ -27,30 +30,48 @@ class App extends Component {
                 { id: 2, name: 'Erin', age: 6 },
                 { id: 3, name: 'Archie', age: 0 },
             ],
-            showPeople: false
+            showPeople: false,
+            authenticated: false
         };
     }
 
-    componentWillMount() {
+    // React 16.3 discourages the used of componentWillMount
+    componentWillMount () {
         console.log('[App.js] inside componentWillMount');
     }
 
-    componentDidMount() {
+    componentDidMount () {
         console.log('[App.js] inside componentDidMount');
     }
 
     shouldComponentUpdate (nextProps, nextState) {
         console.log('[App.js] inside shouldComponentUpdate', nextProps, nextState);
         return nextState.persons !== this.state.persons ||
-            nextState.showPeople !== this.state.showPeople;
+            nextState.showPeople !== this.state.showPeople ||
+            nextState.authenticated !== this.state.authenticated;
     }
 
+    // React 16.3 discourages the used of componentWillUpdate
     componentWillUpdate (nextProps, nextState) {
         console.log('[App.js] inside componentWillUpdate', nextProps, nextState);
     }
 
     componentDidUpdate () {
         console.log('[App.js] inside componentDidUpdate');
+    }
+
+    // Newly available in React 16.3 - getDerivedStateFromProps
+    // executed whenever props are updated
+    static getDerivedStateFromProps (nextProps, prevState) {
+        console.log('[App.js] inside getDerivedStateFromProps', nextProps, prevState);
+        return prevState;
+    }
+
+    // Newly available in React 16.3 - getSnapshotBeforeUpdate
+    // allows a snapshot of your dom just before its about to change
+    getSnapshotBeforeUpdate () {
+        console.log('[App.js] inside getSnapshotBeforeUpdate');
+        return null;
     }
 
     // Initialising state outside of constructor only works in more modern versions
@@ -100,6 +121,13 @@ class App extends Component {
         this.setState({ showPeople: !doesShow });
     }
 
+    loginHandler = () => {
+        console.log('loginHandler');
+        this.setState({
+            authenticated: true
+        });
+    }
+
     render () {
         console.log('[App.js] inside render');
         let people = null;
@@ -119,9 +147,13 @@ class App extends Component {
                     appTitle={this.props.title}
                     showPersons={this.state.showPeople}
                     persons={this.state.people}
+                    login={this.loginHandler}
                     btnClicked={this.togglePeopleHandler}
                 />
-                {people}
+                {/* react context api*/}
+                <AuthContext.Provider value={this.state.authenticated}>
+                    {people}
+                </AuthContext.Provider>
             </Aux>
         );
 

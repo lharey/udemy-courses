@@ -30,6 +30,7 @@ const cockpit = (props) => {
                 // style={style}
                 className={btnClass}
             >Toggle People</button>
+            <button onClick={props.login}>Log In</button>
         </Aux>
     );
 };
@@ -38,7 +39,8 @@ cockpit.propTypes = {
     btnClicked: PropTypes.func,
     appTitle: PropTypes.string,
     persons: PropTypes.array,
-    showPersons: PropTypes.bool
+    showPersons: PropTypes.bool,
+    login: PropTypes.func
 };
 
 export default cockpit;
