@@ -1,4 +1,5 @@
 import React from 'react';
+// import { withRouter } from 'react-router-dom';
 
 import './Post.css';
 
@@ -11,4 +12,6 @@ const post = (props) => (
     </article>
 );
 
+// withRouter gives compnents that aren't a route access tot the Route properties
+// export default withRouter(post);
 export default post;
