@@ -1,0 +1,16 @@
+.App nav {
+    margin-top: 10px;
+}
+
+.App a {
+    margin-top: 10px;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+}
+
+.App a:hover,
+.App a:active,
+.App a.active {
+    color: red;
+}
