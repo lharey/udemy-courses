@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import Aux from '../../hoc/Aux/Aux';
 import Burger from '../../components/Burger/Burger';
@@ -103,40 +104,54 @@ class BurgerBuilder extends Component {
     }
 
     purchaseContinueHandler = () => {
-        this.setState({
-            loading: true
-        });
-        // console.log('Continue');
-        const orderData = {
-            ingredients: this.state.ingredients,
-            price: this.state.totalPrice, // recommend that for a real application you would re-calculate price in case of hackin
-            customer: {
-                name: 'Han Solo',
-                address: {
-                    street: 'moon street',
-                    postcode: 'f11 b11',
-                    country: 'UK'
-                },
-                email: 'han@test.com',
-            },
-            deliveryMethod: 'fastest'
-        };
+        const queryParams = [];
 
-        // the firebase end point is any node name of your choice .json
-        axios.post('/orders.json', orderData)
-            .then(response => {
-                this.setState({
-                    loading: false,
-                    purchasing: false
-                });
-            })
-            .catch(error => {
-                console.log(error);
-                this.setState({
-                    loading: false,
-                    purchasing: false
-                });
-            });
+        Object.keys(this.state.ingredients).forEach((ingredient) => {
+            const value = this.state.ingredients[ingredient];
+            if (value > 0) {
+                queryParams.push(`${encodeURIComponent(ingredient)}=${encodeURIComponent(value)}`);
+            }
+        });
+
+        //const url = `/checkout?meat=${this.state.ingredients.meat}&cheese=${this.state.ingredients.cheese}&bacon==${this.ingredients.bacon}&salad==${this.ingredients.salad}`;
+        this.props.history.push({
+            pathname: '/checkout',
+            search: `?${queryParams.join('&')}`
+        });
+        // this.setState({
+        //     loading: true
+        // });
+        // console.log('Continue');
+        // const orderData = {
+        //     ingredients: this.state.ingredients,
+        //     price: this.state.totalPrice, // recommend that for a real application you would re-calculate price in case of hackin
+        //     customer: {
+        //         name: 'Han Solo',
+        //         address: {
+        //             street: 'moon street',
+        //             postcode: 'f11 b11',
+        //             country: 'UK'
+        //         },
+        //         email: 'han@test.com',
+        //     },
+        //     deliveryMethod: 'fastest'
+        // };
+
+        // // the firebase end point is any node name of your choice .json
+        // axios.post('/orders.json', orderData)
+        //     .then(response => {
+        //         this.setState({
+        //             loading: false,
+        //             purchasing: false
+        //         });
+        //     })
+        //     .catch(error => {
+        //         console.log(error);
+        //         this.setState({
+        //             loading: false,
+        //             purchasing: false
+        //         });
+        //     });
     }
 
     render () {
@@ -194,5 +209,9 @@ class BurgerBuilder extends Component {
         );
     }
 }
+
+BurgerBuilder.propTypes = {
+    history: PropTypes.object
+};
 
 export default withErrorHandler(BurgerBuilder, axios);
