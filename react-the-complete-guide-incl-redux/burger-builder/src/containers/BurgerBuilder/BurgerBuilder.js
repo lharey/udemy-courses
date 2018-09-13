@@ -113,45 +113,12 @@ class BurgerBuilder extends Component {
             }
         });
 
-        //const url = `/checkout?meat=${this.state.ingredients.meat}&cheese=${this.state.ingredients.cheese}&bacon==${this.ingredients.bacon}&salad==${this.ingredients.salad}`;
+        queryParams.push(`price=${this.state.totalPrice}`);
+
         this.props.history.push({
             pathname: '/checkout',
             search: `?${queryParams.join('&')}`
         });
-        // this.setState({
-        //     loading: true
-        // });
-        // console.log('Continue');
-        // const orderData = {
-        //     ingredients: this.state.ingredients,
-        //     price: this.state.totalPrice, // recommend that for a real application you would re-calculate price in case of hackin
-        //     customer: {
-        //         name: 'Han Solo',
-        //         address: {
-        //             street: 'moon street',
-        //             postcode: 'f11 b11',
-        //             country: 'UK'
-        //         },
-        //         email: 'han@test.com',
-        //     },
-        //     deliveryMethod: 'fastest'
-        // };
-
-        // // the firebase end point is any node name of your choice .json
-        // axios.post('/orders.json', orderData)
-        //     .then(response => {
-        //         this.setState({
-        //             loading: false,
-        //             purchasing: false
-        //         });
-        //     })
-        //     .catch(error => {
-        //         console.log(error);
-        //         this.setState({
-        //             loading: false,
-        //             purchasing: false
-        //         });
-        //     });
     }
 
     render () {
