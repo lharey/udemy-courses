@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import classes from './NavigationItem.css';
@@ -6,19 +7,19 @@ import classes from './NavigationItem.css';
 const navigationItem = (props) => {
     return (
         <li className={classes.NavigationItem}>
-            <a
-                href={props.link}
-                className={props.active ? classes.active : null}
+            <NavLink
+                to={props.link}
+                activeClassName={classes.active}
+                exact
             >
                 {props.children}
-            </a>
+            </NavLink>
         </li>
     );
 };
 
 navigationItem.propTypes = {
     link: PropTypes.string,
-    active: PropTypes.bool
 };
 
 export default navigationItem;
