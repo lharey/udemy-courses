@@ -11,8 +11,8 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 people: state.people.concat({
                     id: Math.random(), // not really unique but good enough here!
-                    name: 'Max',
-                    age: Math.floor( Math.random() * 40 )
+                    name: action.name,
+                    age: action.age
                 })
             };
         case actionTypes.DELETE_PERSON:
