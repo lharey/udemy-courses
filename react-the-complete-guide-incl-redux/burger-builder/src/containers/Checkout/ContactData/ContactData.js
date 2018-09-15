@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import axios from '../../../axios-orders';
 
 import Button from '../../../components/UI/Button/Button';
@@ -107,8 +108,8 @@ class ContactData extends Component {
         }
 
         const orderData = {
-            ingredients: this.props.ingredients,
-            price: this.props.price, // recommend that for a real application you would re-calculate price in case of hackin
+            ingredients: this.props.ings,
+            price: this.props.totalPrice, // recommend that for a real application you would re-calculate price in case of hackin
             orderData: formData
         };
 
@@ -205,9 +206,16 @@ class ContactData extends Component {
 }
 
 ContactData.propTypes = {
-    ingredients: PropTypes.object,
-    price: PropTypes.number,
+    ings: PropTypes.object,
+    totalPrice: PropTypes.number,
     history: PropTypes.object
 };
 
-export default ContactData;
+const mapStateToProps = state => {
+    return {
+        ings: state.ingredients,
+        totalPrice: state.totalPrice
+    };
+};
+
+export default connect(mapStateToProps)(ContactData);
