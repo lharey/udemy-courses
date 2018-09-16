@@ -38,6 +38,7 @@
             "arrays": "only-multiline",
             "objects": "only-multiline"
         }],
+        "brace-style": ["error", "stroustrup"],
         "react/jsx-uses-react": 2,
         "react/jsx-uses-vars": [2],
         "react/prop-types": [2, { "ignore": ["children"] }]
