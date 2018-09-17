@@ -39,6 +39,12 @@
             "objects": "only-multiline"
         }],
         "brace-style": ["error", "stroustrup"],
+        "max-len": ["error", {
+            "ignoreRegExpLiterals": true,
+            "ignoreTrailingComments": true,
+            "code": 120,
+            "ignoreUrls": true
+        }],
         "react/jsx-uses-react": 2,
         "react/jsx-uses-vars": [2],
         "react/prop-types": [2, { "ignore": ["children"] }]
