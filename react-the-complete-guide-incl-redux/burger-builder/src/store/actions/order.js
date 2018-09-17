@@ -5,7 +5,7 @@ export const purchaseSuccess = (id, data) => {
     return {
         type: actionTypes.PURCHASE_SUCCESS,
         orderId: id,
-        orderdata: data
+        orderData: data
     };
 };
 
@@ -28,10 +28,56 @@ export const purchase = orderData => {
         // the firebase end point is any node name of your choice .json
         axios.post('/orders.json', orderData)
             .then(response => {
-                dispatch(purchaseSuccess(response.data.id, orderData));
+                dispatch(purchaseSuccess(response.data.name, orderData));
             })
             .catch(error => {
                 dispatch(purchaseFail(error));
+            });
+    };
+};
+
+export const purchaseInit = () => {
+    return {
+        type: actionTypes.PURCHASE_INIT
+    };
+};
+
+export const fetchOrdersSuccess = orders => {
+    return {
+        type: actionTypes.FETCH_ORDERS_SUCCESS,
+        orders: orders
+    };
+};
+
+export const fetchOrdersFail = error => {
+    return {
+        type: actionTypes.FETCH_ORDERS_FAIL,
+        error: error
+    };
+};
+
+export const fetchOrdersStart = () => {
+    return {
+        type: actionTypes.FETCH_ORDERS_START
+    };
+};
+
+export const fetchOrders = () => {
+    return dispatch => {
+        dispatch(fetchOrdersStart());
+        axios.get('orders.json')
+            .then(res => {
+                const orders = [];
+                for (let key in res.data) {
+                    orders.push({
+                        ...res.data[key],
+                        id: key
+                    });
+                }
+                dispatch(fetchOrdersSuccess(orders));
+            })
+            .catch(error => {
+                dispatch(fetchOrdersFail(error));
             });
     };
 };
