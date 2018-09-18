@@ -1,6 +1,8 @@
 import * as actionTypes from './actionTypes';
 import axios from 'axios';
 
+import * as config from '../../config';
+
 export const authStart = () => {
     return {
         type: actionTypes.AUTH_START
@@ -24,7 +26,7 @@ export const authFail = error => {
 export const auth = (email, password) => {
     return dispatch => {
         dispatch(authStart());
-        axios.post('https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyB0zi4Bcu76QA6roluy7zyKw1qKHFT7SWw', {
+        axios.post(`https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=${config.FIREBASE_API_KEY}`, {
             email: email,
             password: password,
             returnSecureToken: true
