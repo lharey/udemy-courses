@@ -9,10 +9,11 @@ export const authStart = () => {
     };
 };
 
-export const authSuccess = authData => {
+export const authSuccess = (token, userId) => {
     return {
         type: actionTypes.AUTH_SUCCESS,
-        authData: authData
+        idToken: token,
+        userId: userId
     };
 };
 
@@ -23,17 +24,36 @@ export const authFail = error => {
     };
 };
 
-export const auth = (email, password) => {
+export const authLogout = () => {
+    return {
+        type: actionTypes.AUTH_LOGOUT
+    };
+};
+
+export const checkAuthTimeout = (expirationTime) => {
+    return dispatch => {
+        setTimeout(() => {
+            dispatch(authLogout());
+        }, expirationTime * 1000);
+    };
+};
+
+export const auth = (email, password, isSignUp) => {
+    const url = isSignUp ?
+        'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser' :
+        'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword';
+
     return dispatch => {
         dispatch(authStart());
-        axios.post(`https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=${config.FIREBASE_API_KEY}`, {
+        axios.post(`${url}?key=${config.FIREBASE_API_KEY}`, {
             email: email,
             password: password,
             returnSecureToken: true
         }).then(response => {
-            dispatch(authSuccess(response.data));
+            dispatch(authSuccess(response.data.idToken, response.data.localId));
+            dispatch(checkAuthTimeout(response.data.expiresIn));
         }).catch(error => {
-            dispatch(authFail(error));
+            dispatch(authFail(error.response.data.error));
         });
     };
 };
