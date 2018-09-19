@@ -22,7 +22,7 @@ const sideDraw = (props) => {
                     <Logo />
                 </div>
                 <nav>
-                    <NavigationItems />
+                    <NavigationItems isAuth={props.isAuth}/>
                 </nav>
             </div>
         </Aux>
@@ -31,7 +31,8 @@ const sideDraw = (props) => {
 
 sideDraw.propTypes = {
     closed: PropTypes.func,
-    open: PropTypes.bool
+    open: PropTypes.bool,
+    isAuth: PropTypes.bool
 };
 
 export default sideDraw;

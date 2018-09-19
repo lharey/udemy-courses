@@ -23,10 +23,10 @@ export const purchaseStart = () => {
 };
 
 export const purchase = orderData => {
-    return dispatch => {
+    return (dispatch, getState) => {
         dispatch(purchaseStart());
         // the firebase end point is any node name of your choice .json
-        axios.post('/orders.json', orderData)
+        axios.post(`/orders.json?auth=${getState().auth.token}`, orderData)
             .then(response => {
                 dispatch(purchaseSuccess(response.data.name, orderData));
             })
@@ -63,9 +63,9 @@ export const fetchOrdersStart = () => {
 };
 
 export const fetchOrders = () => {
-    return dispatch => {
+    return (dispatch, getState) => {
         dispatch(fetchOrdersStart());
-        axios.get('orders.json')
+        axios.get(`orders.json?auth=${getState().auth.token}`)
             .then(res => {
                 const orders = [];
                 for (let key in res.data) {

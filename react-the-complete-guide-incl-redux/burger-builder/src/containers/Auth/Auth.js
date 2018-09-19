@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
@@ -11,6 +12,12 @@ import classes from './Auth.css';
 import * as actions from '../../store/actions/index';
 
 class Auth extends Component {
+    componentDidMount () {
+        if (!this.props.buildingBurger && this.props.authRedirect !== '/') {
+            this.props.onSetAuthRedirectPath('/');
+        }
+    }
+
     state = {
         controls: {
             email: {
@@ -101,6 +108,14 @@ class Auth extends Component {
     };
 
     render () {
+        if (this.props.isAuthenticated) {
+            return (
+                <div className={classes.Auth}>
+                    <Redirect to={this.props.authRedirect} />
+                </div>
+            );
+        }
+
         if (this.props.loading) {
             return (
                 <div className={classes.Auth}>
@@ -148,19 +163,27 @@ class Auth extends Component {
 Auth.propTypes = {
     onAuth: PropTypes.func,
     loading: PropTypes.bool,
-    error: PropTypes.string
+    error: PropTypes.string,
+    isAuthenticated: PropTypes.bool,
+    authRedirect: PropTypes.string,
+    buildingBurger: PropTypes.bool,
+    onSetAuthRedirectPath: PropTypes.func
 };
 
 const mapStateToProps = state => {
     return {
         loading: state.auth.loading,
-        error: state.auth.error
+        error: state.auth.error,
+        isAuthenticated: state.auth.token !== null,
+        authRedirect: state.auth.authRedirectPath,
+        buildingBurger: state.burgerBuilder.building
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAuth: (email, password, isSignUp) => dispatch(actions.auth(email, password, isSignUp))
+        onAuth: (email, password, isSignUp) => dispatch(actions.auth(email, password, isSignUp)),
+        onSetAuthRedirectPath: path => dispatch(actions.setAuthRedirectPath(path))
     };
 };
 
