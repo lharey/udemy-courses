@@ -1,7 +1,9 @@
 {
     "env": {
         "browser": true,
-        "es6": true
+        "node": true,
+        "es6": true,
+        "jest": true
     },
     "extends": ["eslint:recommended","react"],
     "parser": "babel-eslint",
@@ -37,6 +39,13 @@
         "comma-dangle": ["error", {
             "arrays": "only-multiline",
             "objects": "only-multiline"
+        }],
+        "brace-style": ["error", "stroustrup"],
+        "max-len": ["error", {
+            "ignoreRegExpLiterals": true,
+            "ignoreTrailingComments": true,
+            "code": 120,
+            "ignoreUrls": true
         }],
         "react/jsx-uses-react": 2,
         "react/jsx-uses-vars": [2],

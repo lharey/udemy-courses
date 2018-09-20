@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import axios from '../../../axios-orders';
 
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 import classes from './ContactData.css';
+import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
+import * as actionCreators from '../../../store/actions/order';
+import { updateObject, checkValidity } from '../../../lib/utility';
 
 class ContactData extends Component {
     state = {
@@ -90,16 +94,11 @@ class ContactData extends Component {
                 valid: true
             }
         },
-        loading: false,
         formIsValid: false
     };
 
     orderHandler = (event) => {
         event.preventDefault();
-
-        this.setState({
-            loading: true
-        });
 
         const formData = {};
         for (let identifier in this.state.orderForm) {
@@ -107,31 +106,25 @@ class ContactData extends Component {
         }
 
         const orderData = {
-            ingredients: this.props.ingredients,
-            price: this.props.price, // recommend that for a real application you would re-calculate price in case of hackin
-            orderData: formData
+            ingredients: this.props.ings,
+            price: this.props.totalPrice, // recommend that for a real application you would re-calculate price in case of hackin
+            orderData: formData,
+            userId: this.props.userId
         };
 
-        // the firebase end point is any node name of your choice .json
-        axios.post('/orders.json', orderData)
-            .then(response => {
-                this.setState({ loading: false });
-                this.props.history.push('/');
-            })
-            .catch(error => {
-                console.log(error);
-                this.setState({ loading: false });
-            });
+        this.props.onOrderStart(orderData);
     }
 
     changeHandler = (event, inputIdentifier) => {
-        const data = { ...this.state.orderForm };
-        const updatedElement = { ...data[inputIdentifier] };
+        const updatedElement = updateObject(this.state.orderForm[inputIdentifier], {
+            value: event.target.value,
+            touched: true,
+            valid: checkValidity(event.target.value, this.state.orderForm[inputIdentifier].validation)
+        });
 
-        updatedElement.value = event.target.value;
-        updatedElement.touched = true;
-        updatedElement.valid = this.checkValidity(updatedElement.value, updatedElement.validation);
-        data[inputIdentifier] = updatedElement;
+        const data = updateObject(this.state.orderForm, {
+            [inputIdentifier]: updatedElement
+        });
 
         let formIsValid = true;
         for (let identifier in data) {
@@ -142,27 +135,6 @@ class ContactData extends Component {
             orderForm: data,
             formIsValid
         });
-    }
-
-    checkValidity = (value, rules) => {
-        let isValid = true;
-        if (!rules) {
-            return true;
-        }
-
-        if (rules.required) {
-            isValid = value.trim() !== '' && isValid;
-        }
-
-        if (rules.minlength) {
-            isValid = value.length >= rules.minlength && isValid;
-        }
-
-        if (rules.maxlength) {
-            isValid = value.length <= rules.maxlength && isValid;
-        }
-
-        return isValid;
     }
 
     render () {
@@ -192,7 +164,7 @@ class ContactData extends Component {
             </form>
         );
 
-        if (this.state.loading) {
+        if (this.props.loading) {
             form = <Spinner />;
         }
         return (
@@ -205,9 +177,27 @@ class ContactData extends Component {
 }
 
 ContactData.propTypes = {
-    ingredients: PropTypes.object,
-    price: PropTypes.number,
-    history: PropTypes.object
+    ings: PropTypes.object,
+    totalPrice: PropTypes.number,
+    history: PropTypes.object,
+    onOrderStart: PropTypes.func,
+    loading: PropTypes.bool,
+    userId: PropTypes.string
 };
 
-export default ContactData;
+const mapStateToProps = state => {
+    return {
+        ings: state.burgerBuilder.ingredients,
+        totalPrice: state.burgerBuilder.totalPrice,
+        loading: state.order.loading,
+        userId: state.auth.userId
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onOrderStart: (orderData) => dispatch(actionCreators.purchase(orderData))
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(ContactData, axios));
