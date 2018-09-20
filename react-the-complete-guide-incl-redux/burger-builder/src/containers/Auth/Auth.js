@@ -10,6 +10,7 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 import classes from './Auth.css';
 
 import * as actions from '../../store/actions/index';
+import { updateObject, checkValidity } from '../../lib/utility';
 
 class Auth extends Component {
     componentDidMount () {
@@ -52,40 +53,14 @@ class Auth extends Component {
         isSignUp: true
     };
 
-    checkValidity = (value, rules) => {
-        let isValid = true;
-        if (!rules) {
-            return true;
-        }
-
-        if (rules.required) {
-            isValid = value.trim() !== '' && isValid;
-        }
-
-        if (rules.minlength) {
-            isValid = value.length >= rules.minlength && isValid;
-        }
-
-        if (rules.maxlength) {
-            isValid = value.length <= rules.maxlength && isValid;
-        }
-
-        if (rules.isEmail) {
-            const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-            isValid = pattern.test(value) && isValid;
-        }
-
-        return isValid;
-    }
-
     changeHandler = (event, inputIdentifier) => {
-        const data = { ...this.state.controls };
-        const updatedElement = { ...data[inputIdentifier] };
-
-        updatedElement.value = event.target.value;
-        updatedElement.touched = true;
-        updatedElement.valid = this.checkValidity(updatedElement.value, updatedElement.validation);
-        data[inputIdentifier] = updatedElement;
+        const data = updateObject(this.state.controls, {
+            [inputIdentifier]: updateObject(this.state.controls[inputIdentifier], {
+                value: event.target.value,
+                touched: true,
+                valid: checkValidity(event.target.value, this.state.controls[inputIdentifier].validation)
+            })
+        });
 
         this.setState({
             controls: data

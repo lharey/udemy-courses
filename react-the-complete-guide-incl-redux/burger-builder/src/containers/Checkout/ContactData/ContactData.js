@@ -9,6 +9,7 @@ import Input from '../../../components/UI/Input/Input';
 import classes from './ContactData.css';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import * as actionCreators from '../../../store/actions/order';
+import { updateObject, checkValidity } from '../../../lib/utility';
 
 class ContactData extends Component {
     state = {
@@ -115,13 +116,15 @@ class ContactData extends Component {
     }
 
     changeHandler = (event, inputIdentifier) => {
-        const data = { ...this.state.orderForm };
-        const updatedElement = { ...data[inputIdentifier] };
+        const updatedElement = updateObject(this.state.orderForm[inputIdentifier], {
+            value: event.target.value,
+            touched: true,
+            valid: checkValidity(event.target.value, this.state.orderForm[inputIdentifier].validation)
+        });
 
-        updatedElement.value = event.target.value;
-        updatedElement.touched = true;
-        updatedElement.valid = this.checkValidity(updatedElement.value, updatedElement.validation);
-        data[inputIdentifier] = updatedElement;
+        const data = updateObject(this.state.orderForm, {
+            [inputIdentifier]: updatedElement
+        });
 
         let formIsValid = true;
         for (let identifier in data) {
@@ -132,27 +135,6 @@ class ContactData extends Component {
             orderForm: data,
             formIsValid
         });
-    }
-
-    checkValidity = (value, rules) => {
-        let isValid = true;
-        if (!rules) {
-            return true;
-        }
-
-        if (rules.required) {
-            isValid = value.trim() !== '' && isValid;
-        }
-
-        if (rules.minlength) {
-            isValid = value.length >= rules.minlength && isValid;
-        }
-
-        if (rules.maxlength) {
-            isValid = value.length <= rules.maxlength && isValid;
-        }
-
-        return isValid;
     }
 
     render () {
