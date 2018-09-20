@@ -13,7 +13,9 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
 import * as actionCreators from '../../store/actions/index';
 
-class BurgerBuilder extends Component {
+// For components to be tested always export the class as well as having
+// a default below
+export class BurgerBuilder extends Component {
     // constructor (props) {
     //     super (props);
     //     this.state = {...}
