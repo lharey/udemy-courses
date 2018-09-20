@@ -107,7 +107,8 @@ class ContactData extends Component {
         const orderData = {
             ingredients: this.props.ings,
             price: this.props.totalPrice, // recommend that for a real application you would re-calculate price in case of hackin
-            orderData: formData
+            orderData: formData,
+            userId: this.props.userId
         };
 
         this.props.onOrderStart(orderData);
@@ -198,14 +199,16 @@ ContactData.propTypes = {
     totalPrice: PropTypes.number,
     history: PropTypes.object,
     onOrderStart: PropTypes.func,
-    loading: PropTypes.bool
+    loading: PropTypes.bool,
+    userId: PropTypes.string
 };
 
 const mapStateToProps = state => {
     return {
         ings: state.burgerBuilder.ingredients,
         totalPrice: state.burgerBuilder.totalPrice,
-        loading: state.order.loading
+        loading: state.order.loading,
+        userId: state.auth.userId
     };
 };
 
