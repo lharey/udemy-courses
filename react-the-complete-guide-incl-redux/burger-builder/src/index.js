@@ -13,7 +13,7 @@ import orderReducer from './store/reducers/order';
 import authReducer from './store/reducers/Auth';
 
 const nodeEnv = process.env.NODE_ENV;
-const composeEnhancers = nodeEnv === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose : null;
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const rootReducer = combineReducers({
     burgerBuilder: burgerBuilderReducer,
@@ -23,7 +23,7 @@ const rootReducer = combineReducers({
 
 const store = createStore(
     rootReducer,
-    composeEnhancers(applyMiddleware(thunk))
+    (nodeEnv === 'development' ? composeEnhancers(applyMiddleware(thunk)) : applyMiddleware(thunk))
 );
 
 const app = (
